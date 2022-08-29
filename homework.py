@@ -82,10 +82,10 @@ class Running(Training):
         r_coeff_cal_1 = 18
         r_coeff_cal_2 = 20
         hours_in_minutes = 60
-        dur_in_min = self.duration * hours_in_minutes
+        dr_in_min = self.duration * hours_in_minutes
         medium_speed = self.get_mean_speed()
         coeff_medium_speed = (r_coeff_cal_1 * medium_speed - r_coeff_cal_2)
-        total_calories = coeff_medium_speed * self.weight / M_IN_KM * dur_in_min
+        total_calories = coeff_medium_speed * self.weight / M_IN_KM * dr_in_min
         return total_calories
 
 
