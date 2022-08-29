@@ -93,12 +93,13 @@ class SportsWalking(Training):
 
     def __init__(self,
                  action: int,
-                 duration:  int,
+                 duration: int,
                  weight: float,
                  height: int
                  ) -> None:
         super().__init__(action, duration, weight)
         self.height = height
+
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
         w_coeff_cal_1 = 0.035
@@ -107,7 +108,7 @@ class SportsWalking(Training):
         hours_in_minutes = 60
         dur_in_min = self.duration * hours_in_minutes
         m_speed = self.get_mean_speed()
-        total_calories = (w_coeff_cal_1*self.weight+(m_speed**w_coeff_cal_3//self.height)*w_coeff_cal_2*self.height)*dur_in_min
+        total_calories = (w_coeff_cal_1 * self.weight + (m_speed ** w_coeff_cal_3 // self.height) * w_coeff_cal_2 * self.height) * dur_in_min
         return total_calories
 
 
@@ -141,7 +142,8 @@ class Swimming(Training):
         """Получить количество затраченных калорий."""
         swim_coeff_cal_1 = 1.1
         swim_coeff_cal_2 = 2
-        total_calories = (self.get_mean_speed() + swim_coeff_cal_1) * swim_coeff_cal_2 * self.weight
+        total_calories = (self.get_mean_speed() + swim_coeff_cal_1) * \
+            swim_coeff_cal_2 * self.weight
         return total_calories
 
 
@@ -171,7 +173,7 @@ def read_package(workout_type: str, data: list) -> Training:
 
 
 def main(training: Training) -> None:
-    """Главная функция. Обработка данных с трекера, и её вывод"""
+    """Главная функция. Обработка данных с трекера, и её вывод."""
 
     info = training.show_training_info()
     info_text = info.get_message()
@@ -183,7 +185,7 @@ if __name__ == '__main__':
         ('SWM', [720, 1, 80, 25, 40]),
         ('RUN', [15000, 1, 75]),
         ('WLK', [9000, 1, 75, 180]),
-        ]
+    ]
 
     for workout_type, data in packages:
         training = read_package(workout_type, data)
