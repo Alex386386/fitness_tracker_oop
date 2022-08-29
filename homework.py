@@ -107,7 +107,7 @@ class SportsWalking(Training):
         hours_in_minutes = 60
         dur_in_min = self.duration * hours_in_minutes
         m_speed = self.get_mean_speed()
-        total_calories = (w_coeff_cal_1 * self.weight + (m_speed**w_coeff_cal_3 // self.height) * w_coeff_cal_2 * self.height) * dur_in_min
+        total_calories = (w_coeff_cal_1*self.weight+(m_speed**w_coeff_cal_3//self.height)*w_coeff_cal_2*self.height)*dur_in_min
         return total_calories
 
 
