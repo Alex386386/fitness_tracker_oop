@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 
 
 @dataclass
@@ -24,7 +24,7 @@ class Training:
     LEN_STEP: float = 0.65
     LEN_SWIM: float = 1.38
     M_IN_KM: int = 1000
-    hours_in_minutes: int = 60
+    HOURS_IN_MINUTES: int = 60
 
     def __init__(self,
                  action: int,
@@ -33,7 +33,7 @@ class Training:
                  ) -> None:
         self.action = action
         self.duration = duration
-        self.duration_min = self.duration * self.hours_in_minutes
+        self.duration_min = self.duration * self.HOURS_IN_MINUTES
         self.weight = weight
 
     def get_distance(self) -> float:
@@ -46,7 +46,11 @@ class Training:
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        raise NotImplementedError
+        raise NotImplementedError  # В случае запуска функции произойдёт ошибка
+
+    # так как в базовом классе метод get_spent_calories не определён,
+    # ведь для каждого типо тренировки он свой,
+    # и определён должен быть непосредственно в классе конкретной тренировки.
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
@@ -60,8 +64,8 @@ class Training:
 
 class Running(Training):
     """Тренировка: бег."""
-    r_coeff_cal_1 = 18
-    r_coeff_cal_2 = 20
+    R_COEFF_CAL_1: int = 18
+    R_COEFF_CAL_2: int = 20
 
     def __init__(self,
                  action: int,
@@ -73,17 +77,17 @@ class Running(Training):
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
         medium_speed = self.get_mean_speed()
-        result_medium_speed = self.r_coeff_cal_1 * medium_speed
-        coeff_medium_speed = (result_medium_speed - self.r_coeff_cal_2)
+        result_medium_speed = self.R_COEFF_CAL_1 * medium_speed
+        coeff_medium_speed = (result_medium_speed - self.R_COEFF_CAL_2)
         changed_weight = coeff_medium_speed * self.weight
         return changed_weight / self.M_IN_KM * self.duration_min
 
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
-    w_coeff_cal_1: float = 0.035
-    w_coeff_cal_2: float = 0.029
-    w_coeff_cal_3: int = 2
+    W_COEFF_CAL_1: float = 0.035
+    W_COEFF_CAL_2: float = 0.029
+    W_COEFF_CAL_3: int = 2
 
     def __init__(self,
                  action: int,
@@ -97,9 +101,9 @@ class SportsWalking(Training):
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
         m_speed = self.get_mean_speed()
-        result_speed = (m_speed ** self.w_coeff_cal_3 // self.height)
-        coeff_weight = self.w_coeff_cal_1 * self.weight
-        coeff_height = result_speed * self.w_coeff_cal_2 * self.height
+        result_speed = (m_speed ** self.W_COEFF_CAL_3 // self.height)
+        coeff_weight = self.W_COEFF_CAL_1 * self.weight
+        coeff_height = result_speed * self.W_COEFF_CAL_2 * self.height
         return (coeff_weight + coeff_height) * self.duration_min
 
 
@@ -137,12 +141,8 @@ class Swimming(Training):
 
 def read_package(workout_type_def: str, data_def: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    if workout_type_def == 'SWM':
-        return Swimming(*data_def)
-    elif workout_type_def == 'RUN':
-        return Running(*data_def)
-    elif workout_type_def == 'WLK':
-        return SportsWalking(*data_def)
+    type_of_raining = {"SWM": Swimming, "RUN": Running, "WLK": SportsWalking}
+    return type_of_raining[workout_type_def](*data_def)
 
 
 def main(training_def: Training) -> None:
