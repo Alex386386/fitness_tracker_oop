@@ -1,4 +1,4 @@
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 
 
 @dataclass
@@ -110,8 +110,8 @@ class SportsWalking(Training):
 class Swimming(Training):
     """Тренировка: плавание."""
     LEN_STEP: float = 1.38
-    swim_coeff_cal_1: float = 1.1
-    swim_coeff_cal_2: int = 2
+    SWIM_COEFF_CAL_1: float = 1.1
+    SWIM_COEFF_CAL_2: int = 2
 
     def __init__(self,
                  action: int,
@@ -135,8 +135,8 @@ class Swimming(Training):
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        swim_speed = (self.get_mean_speed() + self.swim_coeff_cal_1)
-        return swim_speed * self.swim_coeff_cal_2 * self.weight
+        swim_speed = (self.get_mean_speed() + self.SWIM_COEFF_CAL_1)
+        return swim_speed * self.SWIM_COEFF_CAL_2 * self.weight
 
 
 def read_package(workout_type_def: str, data_def: list) -> Training:
