@@ -12,11 +12,12 @@ class InfoMessage:
 
     def get_message(self) -> str:
         """Функция возвращающая строку со значениями."""
-        return ('Тип тренировки: {training_type}; '
-                'Длительность: {duration:.3f} ч.; '
-                'Дистанция: {distance:.3f} км; '
-                'Ср. скорость: {speed:.3f} км/ч; '
-                'Потрачено ккал: {calories:.3f}.'.format(**asdict(self)))
+        message = ('Тип тренировки: {training_type}; '
+                   'Длительность: {duration:.3f} ч.; '
+                   'Дистанция: {distance:.3f} км; '
+                   'Ср. скорость: {speed:.3f} км/ч; '
+                   'Потрачено ккал: {calories:.3f}.'.format(**asdict(self)))
+        return message
 
 
 class Training:
@@ -46,14 +47,11 @@ class Training:
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        raise NotImplementedError  # В случае запуска функции произойдёт ошибка
-    # так как в базовом классе метод get_spent_calories не определён,
-    # ведь для каждого типа тренировки он свой,
-    # и определён должен быть непосредственно в классе конкретной тренировки.
+        raise NotImplementedError(f'Переопределите get_spent_calories() '
+                                  f'в {type(self).__name__}')
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
-
         return InfoMessage(type(self).__name__,
                            self.duration,
                            self.get_distance(),
@@ -136,8 +134,13 @@ class Swimming(Training):
 
 def read_package(workout_type_def: str, data_def: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    type_of_training = {"SWM": Swimming, "RUN": Running, "WLK": SportsWalking}
-    return type_of_training[workout_type_def](*data_def)
+    type_of_training: Dict[str, Type[Training]] = {"SWM": Swimming,
+                                                   "RUN": Running,
+                                                   "WLK": SportsWalking}
+    if workout_type_def not in type_of_training:
+        raise ValueError('Неккоректный тип тренировки')
+    else:
+        return type_of_training[workout_type_def](*data_def)
 
 
 def main(training_def: Training) -> None:
