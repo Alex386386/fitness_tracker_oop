@@ -10,7 +10,7 @@
 Python 3.8
 
 ### Установка, Как запустить проект:
-https://github.com/Alex386386/hw_python_oop
+https://github.com/Alex386386/fitness_tracker_oop
 
 Клонировать репозиторий и перейти в него в командной строке:
 
@@ -19,7 +19,7 @@ git clone
 ```
 
 ```
-cd hw_python_oop
+cd fitness_tracker_oop
 ```
 
 Cоздать и активировать виртуальное окружение:
@@ -55,8 +55,6 @@ pip install -r requirements.txt
 ```
 python homework.py
 ```
-
-Проект сделан в рамках учебного процесса по специализации Python-разработчик (back-end) Яндекс.Практикум.
 
 Автор:
 
